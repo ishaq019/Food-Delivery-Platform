@@ -4,12 +4,15 @@ import { assets } from "../../assets/frontend_assets/assets";
 import { StoreContext } from "../../context/StoreContext";
 
 const FoodItem = ({ id, name, price, description, image }) => {
-  const {cartItems,addToCart,removeFromCart,url}=useContext(StoreContext); 
+  const {cartItems,addToCart,removeFromCart,url}=useContext(StoreContext);
+
+  // If image is a string (backend filename), use url+/images/; otherwise it's an imported asset
+  const imgSrc = typeof image === 'string' ? url+"/images/"+image : image;
 
   return (
     <div className="food-item">
       <div className="food-item-img-container">
-        <img src={url+"/images/"+image} alt="" className="food-item-image" />
+        <img src={imgSrc} alt="" className="food-item-image" />
         {!cartItems[id] ? (
           <img
             className="add"
@@ -31,7 +34,7 @@ const FoodItem = ({ id, name, price, description, image }) => {
           <img src={assets.rating_starts} alt="" />
         </div>
         <p className="food-item-desc">{description}</p>
-        <p className="food-item-price">${price}</p>
+        <p className="food-item-price">&#8377;{price}</p>
       </div>
     </div>
   );

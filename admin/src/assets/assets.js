@@ -13,5 +13,3 @@ export const assets ={
     upload_area,
     parcel_icon
 }
-
-export const url = 'https://food-delivery-backend-5b6g.onrender.com'
