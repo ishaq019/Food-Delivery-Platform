@@ -1,0 +1,83 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # ── Build Frontend ──
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: frontend
+        env:
+          VITE_BACKEND_URL: ${{ vars.VITE_BACKEND_URL }}
+        run: npm run build
+
+      # ── Build Admin ──
+      - name: Install admin dependencies
+        working-directory: admin
+        run: npm ci
+
+      - name: Build admin
+        working-directory: admin
+        env:
+          VITE_BACKEND_URL: ${{ vars.VITE_BACKEND_URL }}
+        run: npm run build
+
+      # ── Combine outputs ──
+      - name: Copy admin build into frontend dist
+        run: |
+          mkdir -p frontend/dist/admin
+          cp -r admin/dist/* frontend/dist/admin/
+
+      # ── SPA fallback: copy index.html to 404.html ──
+      - name: Create SPA 404 fallback for frontend
+        run: cp frontend/dist/index.html frontend/dist/404.html
+
+      - name: Create SPA 404 fallback for admin
+        run: cp frontend/dist/admin/index.html frontend/dist/admin/404.html
+
+      # ── Custom domain CNAME ──
+      - name: Add CNAME for syedishaq.me
+        run: echo "syedishaq.me" > frontend/dist/CNAME
+
+      # ── Deploy ──
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

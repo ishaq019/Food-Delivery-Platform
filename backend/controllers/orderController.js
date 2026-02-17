@@ -1,7 +1,14 @@
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
+import Razorpay from "razorpay";
+import crypto from "crypto";
 
-// placing user order for frontend
+const razorpayInstance = new Razorpay({
+  key_id: process.env.ROZAR_KEY,
+  key_secret: process.env.ROZAR_SECRET_KEY,
+});
+
+// placing user order for frontend — creates a Razorpay order
 const placeOrder = async (req, res) => {
   try {
     const newOrder = new orderModel({
@@ -13,26 +20,64 @@ const placeOrder = async (req, res) => {
     await newOrder.save();
     await userModel.findByIdAndUpdate(req.body.userId, { cartData: {} });
 
-    res.json({ success: true, orderId: newOrder._id, message: "Order placed successfully" });
+    // amount is in INR, Razorpay expects paise (×100)
+    const razorpayOrder = await razorpayInstance.orders.create({
+      amount: req.body.amount * 100,
+      currency: "INR",
+      receipt: newOrder._id.toString(),
+    });
+
+    res.json({
+      success: true,
+      orderId: newOrder._id,
+      razorpayOrderId: razorpayOrder.id,
+      amount: razorpayOrder.amount,
+      currency: razorpayOrder.currency,
+      keyId: process.env.ROZAR_KEY,
+      message: "Order created",
+    });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: "Error" });
+    res.json({ success: false, message: "Error creating order" });
   }
 };
 
+// verify Razorpay payment signature
 const verifyOrder = async (req, res) => {
-  const { orderId, success } = req.body;
+  const { orderId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
   try {
-    if (success == "true") {
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.ROZAR_SECRET_KEY)
+      .update(body)
+      .digest("hex");
+
+    if (expectedSignature === razorpay_signature) {
       await orderModel.findByIdAndUpdate(orderId, { payment: true });
-      res.json({ success: true, message: "Paid" });
+
+      // Forward to Pabbly webhook (fire-and-forget)
+      const webhookUrl = process.env.WEBHOOK_URL;
+      if (webhookUrl) {
+        fetch(webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            orderId,
+            razorpay_order_id,
+            razorpay_payment_id,
+            status: "paid",
+          }),
+        }).catch((err) => console.log("Webhook forward error:", err));
+      }
+
+      res.json({ success: true, message: "Payment verified" });
     } else {
       await orderModel.findByIdAndDelete(orderId);
-      res.json({ success: false, message: "Not Paid" });
+      res.json({ success: false, message: "Payment verification failed" });
     }
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: "Error" });
+    res.json({ success: false, message: "Error verifying payment" });
   }
 };
 

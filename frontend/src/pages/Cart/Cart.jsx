@@ -17,7 +17,10 @@ const Cart = () => {
   const navigate=useNavigate();
 
   const getImageSrc = (image) => {
-    return typeof image === 'string' ? url+"/images/"+image : image;
+    if (typeof image === 'string') {
+      return image.startsWith('http') ? image : url + "/images/" + image;
+    }
+    return image;
   };
 
   return (

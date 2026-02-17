@@ -6,8 +6,10 @@ import { StoreContext } from "../../context/StoreContext";
 const FoodItem = ({ id, name, price, description, image }) => {
   const {cartItems,addToCart,removeFromCart,url}=useContext(StoreContext);
 
-  // If image is a string (backend filename), use url+/images/; otherwise it's an imported asset
-  const imgSrc = typeof image === 'string' ? url+"/images/"+image : image;
+  // If image is a full URL (Cloudinary), use as-is; if a string filename, prepend backend url
+  const imgSrc = typeof image === 'string'
+    ? (image.startsWith('http') ? image : url + "/images/" + image)
+    : image;
 
   return (
     <div className="food-item">

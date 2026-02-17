@@ -37,106 +37,6 @@
     margin-top: 30px;
 }
 
-/* QR Payment Section */
-.qr-payment-section{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 70vh;
-    animation: fadeInUp 0.5s ease-out;
-}
-.qr-payment-card{
-    background: white;
-    border-radius: 16px;
-    padding: 40px 50px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
-    text-align: center;
-    max-width: 420px;
-    width: 100%;
-}
-.qr-payment-card h2{
-    font-size: 24px;
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 5px;
-}
-.qr-amount{
-    font-size: 36px;
-    font-weight: 700;
-    color: tomato;
-    margin: 10px 0 20px;
-}
-.qr-code-wrapper{
-    display: flex;
-    justify-content: center;
-    padding: 15px;
-    background: #f9f9f9;
-    border-radius: 12px;
-    margin-bottom: 20px;
-    border: 2px dashed #e0e0e0;
-}
-.qr-upi-id{
-    font-size: 14px;
-    color: #666;
-    background: #f0f0f0;
-    padding: 8px 16px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-bottom: 12px;
-    font-family: monospace;
-}
-.qr-instruction{
-    font-size: 13px;
-    color: #888;
-    margin-bottom: 25px;
-    line-height: 1.5;
-}
-.qr-actions{
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-.qr-confirm-btn{
-    background: linear-gradient(135deg, #28a745, #218838);
-    color: white;
-    border: none;
-    padding: 14px 24px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-.qr-confirm-btn:hover{
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
-}
-.qr-cancel-btn{
-    background: transparent;
-    color: #666;
-    border: 1px solid #ddd;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.qr-cancel-btn:hover{
-    border-color: tomato;
-    color: tomato;
-}
-
-@keyframes fadeInUp{
-    0%{
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100%{
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 @media (max-width:800px) {
     .place-order{
         flex-direction: column;
@@ -144,8 +44,5 @@
     }
     .place-order-left .title{
         font-size: 27px;
-    }
-    .qr-payment-card{
-        padding: 25px 20px;
     }
 }
