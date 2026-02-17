@@ -1,7 +1,8 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 import { connectDB } from "./config/db.js";
-import { connectCloudinary } from "./config/cloudinary.js";
 import foodRouter from "./routes/foodRoute.js";
 import userRouter from "./routes/userRoute.js";
 import "dotenv/config";
@@ -39,15 +40,19 @@ app.use(
   })
 );
 
-// DB & Cloudinary connection
+// DB connection
 connectDB();
-connectCloudinary();
 
 // api endpoints
 app.use("/api/food", foodRouter);
 app.use("/api/user", userRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
+
+// Serve uploaded images (legacy seed data + local uploads)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use("/images", express.static(path.join(__dirname, "uploads")));
 
 app.get("/", (req, res) => {
   res.send("API Working");

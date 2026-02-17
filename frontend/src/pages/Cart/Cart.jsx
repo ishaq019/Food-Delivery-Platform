@@ -18,7 +18,7 @@ const Cart = () => {
 
   const getImageSrc = (image) => {
     if (typeof image === 'string') {
-      return image.startsWith('http') ? image : url + "/images/" + image;
+      return (image.startsWith('data:') || image.startsWith('http')) ? image : url + "/images/" + image;
     }
     return image;
   };
