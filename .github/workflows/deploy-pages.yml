@@ -29,19 +29,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
 
       # ----------------------
       # Build frontend
       # ----------------------
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm install
 
       - name: Build frontend
         working-directory: frontend
-        env:
-          VITE_BACKEND_URL: ${{ vars.VITE_BACKEND_URL }}
         run: npm run build
 
       # ----------------------
@@ -49,12 +46,10 @@ jobs:
       # ----------------------
       - name: Install admin dependencies
         working-directory: admin
-        run: npm ci
+        run: npm install
 
       - name: Build admin
         working-directory: admin
-        env:
-          VITE_BACKEND_URL: ${{ vars.VITE_BACKEND_URL }}
         run: npm run build
 
       # ----------------------
