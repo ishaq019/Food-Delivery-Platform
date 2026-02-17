@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://syedishaq.me/Food-Delivery-Platform",
+  "homepage": "https://syedishaq.me/Food-Delivery-Platform/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
