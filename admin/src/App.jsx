@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./components/Login/Login";
 
 const App = () => {
-  const url = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+  const url = "https://food-delivery-platform-lilac.vercel.app";
   return (
     <div>
       <ToastContainer />

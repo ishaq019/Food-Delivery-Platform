@@ -16,10 +16,10 @@ concurrency:
 
 jobs:
   build-and-deploy:
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
@@ -29,8 +29,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
 
-      # ── Build Frontend ──
+      # ----------------------
+      # Build frontend
+      # ----------------------
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
@@ -41,7 +44,9 @@ jobs:
           VITE_BACKEND_URL: ${{ vars.VITE_BACKEND_URL }}
         run: npm run build
 
-      # ── Build Admin ──
+      # ----------------------
+      # Build admin
+      # ----------------------
       - name: Install admin dependencies
         working-directory: admin
         run: npm ci
@@ -52,26 +57,35 @@ jobs:
           VITE_BACKEND_URL: ${{ vars.VITE_BACKEND_URL }}
         run: npm run build
 
-      # ── Combine outputs ──
-      - name: Copy admin build into frontend dist
+      # ----------------------
+      # Combine outputs
+      # ----------------------
+      - name: Merge admin into frontend dist (/admin)
         run: |
+          rm -rf frontend/dist/admin
           mkdir -p frontend/dist/admin
-          cp -r admin/dist/* frontend/dist/admin/
+          cp -a admin/dist/. frontend/dist/admin/
 
-      # ── SPA fallback: copy index.html to 404.html ──
-      - name: Create SPA 404 fallback for frontend
+      # ----------------------
+      # SPA fallback
+      # ----------------------
+      - name: SPA fallback for frontend (/)
         run: cp frontend/dist/index.html frontend/dist/404.html
 
-      - name: Create SPA 404 fallback for admin
+      - name: SPA fallback for admin (/admin)
         run: cp frontend/dist/admin/index.html frontend/dist/admin/404.html
 
-      # ── Custom domain CNAME ──
-      - name: Add CNAME for syedishaq.me
+      # ----------------------
+      # Custom domain
+      # ----------------------
+      - name: Add CNAME
         run: echo "syedishaq.me" > frontend/dist/CNAME
 
-      # ── Deploy ──
+      # ----------------------
+      # Deploy
+      # ----------------------
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
